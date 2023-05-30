@@ -1,0 +1,34 @@
+GET http://localhost:3009/api/sothuebao/getall?status=&keyword=2546358908
+
+###
+GET http://localhost:3009/api/sothuebao/getbyid/1
+
+###
+GET http://localhost:3009/api/sothuebao/statistics
+###
+POST http://localhost:3009/api/sothuebao/register
+Content-Type: application/json
+
+{
+    "sothuebao":"0986395114"
+}
+
+###
+PUT  http://localhost:3009/api/sothuebao/updatebyid/462
+Content-Type: application/json
+
+{
+    "sothuebao":"99999999999",
+    "status":"2"
+}
+
+###
+DELETE  http://localhost:3009/api/sothuebao/delete/5
+###
+PUT  http://localhost:3009/api/sothuebao/update-status/463
+Content-Type: application/json
+
+{
+    "status":"1"
+   
+}

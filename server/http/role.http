@@ -1,0 +1,31 @@
+GET http://localhost:3010/api/role/getall?publish=
+###
+GET http://localhost:3009/api/role/getbyid/1
+###
+POST http://localhost:3009/api/role/register
+Content-Type: application/json
+
+{
+    "name":"admin",
+    "publish":""
+}
+
+###
+PUT  http://localhost:3009/api/role/updatebyid/4
+Content-Type: application/json
+
+{
+    "name":"supuser111",
+    "publish":""
+}
+
+###
+DELETE  http://localhost:3009/api/role/delete/2
+###
+PUT  http://localhost:3009/api/role/update-publish/1
+Content-Type: application/json
+
+{
+    "publish":""
+   
+}

@@ -1,0 +1,40 @@
+GET http://localhost:3009/api/serithuebao/getall?status=&keyword=
+###
+GET http://localhost:3009/api/serithuebao/getbyid/1
+
+###
+GET http://localhost:3009/api/serithuebao/statistics
+###
+
+
+POST http://localhost:3009/api/serithuebao/register
+Content-Type: application/json
+
+{
+    "serithuebao":"8974835894375"
+}
+
+
+
+###
+PUT  http://localhost:3009/api/serithuebao/updatebyid/4
+Content-Type: application/json
+
+{
+    "serithuebao":"0986395998114",
+    "status":"1"
+}
+###
+PUT  http://localhost:3009/api/serithuebao/upload-excel
+
+
+###
+DELETE  http://localhost:3009/api/serithuebao/delete/5
+###
+PUT  http://localhost:3009/api/serithuebao/update-status/1
+Content-Type: application/json
+
+{
+    "status":"2"
+   
+}

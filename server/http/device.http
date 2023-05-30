@@ -1,0 +1,53 @@
+GET http://localhost:3009/api/device/getall?keyword=325467865432
+###
+GET http://localhost:3009/api/device/getbyid/1
+###
+POST http://localhost:3009/api/device/register
+Content-Type: application/json
+
+{
+  
+    "imei":"325467865553432",
+    "seri":"34567865432",
+    "note":""
+}
+
+###
+PUT  http://localhost:3009/api/device/updatebyid/78
+Content-Type: application/json
+
+{
+   "imei":"325467865432",
+    "seri":"123123123",
+    "group_device_id":"1",
+    "note":""
+}
+
+###
+DELETE  http://localhost:3009/api/device/delete/2
+
+###
+PUT   http://localhost:3009/api/device/move-user
+Content-Type: application/json
+
+{
+   "imei":"3254678655432",
+   "user_id":"3"
+}
+###
+PUT   http://localhost:3009/api/device/change-expired-on
+Content-Type: application/json
+
+{
+   "imei":"3254678655432",
+    "expired_on":"1682821256000"
+}
+
+###
+PUT   http://localhost:3009/api/device/change-group/69
+Content-Type: application/json
+
+{
+   "group_device_id":"1"
+}
+

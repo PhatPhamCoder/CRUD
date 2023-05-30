@@ -1,0 +1,33 @@
+GET http://localhost:3009/api/group-device/getall?publish=&keyword=
+###
+GET http://localhost:3009/api/group-device/getbyid/10
+###
+POST http://localhost:3009/api/group-device/register
+Content-Type: application/json
+
+{
+    "name":"vip Pro",
+    "publish":""
+}
+
+
+
+###
+PUT  http://localhost:3009/api/group-device/updatebyid/1
+Content-Type: application/json
+
+{
+    "name":"supuser111",
+    "publish":""
+}
+
+###
+DELETE  http://localhost:3009/api/group-device/delete/2
+###
+PUT  http://localhost:3009/api/group-device/update-publish/1
+Content-Type: application/json
+
+{
+    "publish":"0"
+   
+}

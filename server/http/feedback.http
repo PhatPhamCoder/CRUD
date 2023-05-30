@@ -1,0 +1,22 @@
+GET http://localhost:3009/api/feedback/getall?keyword=9
+###
+GET http://localhost:3009/api/feedback/getbyid/1
+###
+POST http://localhost:3009/api/feedback/register
+Content-Type: application/json
+
+{
+    "msg":"khương",
+    "phone":"0986347114",
+    "email":"leduykhuonggcd@gmail.com"
+}
+
+
+
+
+###
+DELETE  http://localhost:3009/api/feedback/delete/1
+###
+PUT  http://localhost:3009/api/feedback/update-status/1
+Content-Type: application/json
+

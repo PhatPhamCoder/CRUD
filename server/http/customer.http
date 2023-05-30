@@ -1,0 +1,46 @@
+
+
+GET http://localhost:3009/api/customer/getall?keyword=
+###
+GET http://localhost:3009/api/customer/getbyid/8765
+###
+POST http://localhost:3009/api/customer/register
+Content-Type: application/json
+
+{
+    "name":"dev",
+    "phone":"012347918",
+    "address":"Khuong15079999",
+    "user_id":"1",
+    "active":"0",
+    "web_page":"0",
+    "image":"0",
+    "active":"0"
+    
+}
+
+
+###
+PUT  http://localhost:3009/api/customer/updatebyid/1
+Content-Type: application/json
+
+{
+    "name":"dev",
+    "phone":"09863951jdkfdj14",
+    "address":"Khuong15079999",
+    "email":"khuongdev99@gmail.com",
+    "active":"0",
+    "web_page":"0"
+    
+}
+
+###
+DELETE  http://localhost:3009/api/customer/delete/27
+###
+PUT  http://localhost:3009/api/customer/update-active/1
+Content-Type: application/json
+
+{
+    "active":""
+   
+}

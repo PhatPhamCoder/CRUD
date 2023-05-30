@@ -1,0 +1,51 @@
+GET http://localhost:3009/api/module/getall?publish=&keyword=
+###
+GET http://localhost:3009/api/module/getallrows
+###
+GET http://localhost:3009/api/module/getbyid/1
+###
+POST http://localhost:3009/api/module/register
+Content-Type: application/json
+
+{   "parent_id":"9",
+    "name":"thiết bi 14",
+    "link":"/device/child1",
+    "component":"Device",
+    "icon":"",
+    "sort":"",
+    "publish":""
+}
+
+###
+PUT  http://localhost:3009/api/module/updatebyid/1
+Content-Type: application/json
+
+{
+    "parent_id":"0",
+    "name":"Thiết bị",
+    "link":"/device",
+    "component":"Device",
+    "icon":"",
+    "sort":"1",
+    "publish":"1"
+}
+
+###
+DELETE  http://localhost:3009/api/module/delete/6
+###
+PUT  http://localhost:3009/api/module/update-publish/1
+Content-Type: application/json
+
+{
+    "publish":""
+   
+}
+
+###
+PUT  http://localhost:3009/api/module/update-sort/1
+Content-Type: application/json
+
+{
+    "sort":"10"
+   
+}
