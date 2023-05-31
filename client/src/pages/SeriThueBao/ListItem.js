@@ -14,9 +14,6 @@ export default function ListItem({ data = [], openFormUpdate }) {
     const msg = resultAction.payload.msg;
     if (updateStatus.fulfilled.match(resultAction)) {
       toast.success(msg);
-      setTimeout(() => {
-        window.location.reload();
-      }, 500);
     } else {
       toast.error(msg);
     }
@@ -38,7 +35,6 @@ export default function ListItem({ data = [], openFormUpdate }) {
         if (deleteSeri.fulfilled.match(action)) {
           const msg = action.payload.msg;
           toast.success(msg);
-          window.location.reload();
         } else {
           const msg = action.payload;
           toast.error(msg);

@@ -9,7 +9,15 @@ export const createSeriThueBao = createAsyncThunk(
   `${module}/create`,
   async (data, rejectWithValue) => {
     try {
-      return await serithuebaoApi.add(data);
+      const response = await serithuebaoApi.add(data);
+      if (response.result) {
+        const newData = response.data.newData;
+        const results = {
+          data: newData,
+          msg: response.data.msg,
+        };
+        return results;
+      }
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -65,7 +73,14 @@ export const deleteSeri = createAsyncThunk(
   `${module}/delete`,
   async (id, rejectWithValue) => {
     try {
-      return await serithuebaoApi.delete(id);
+      const response = await serithuebaoApi.delete(id);
+      if (response.result) {
+        const results = {
+          id: id,
+          msg: response.data.msg,
+        };
+        return results;
+      }
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -170,10 +185,10 @@ export const serithuebaoSlice = createSlice({
         state.isSuccess = true;
         if (state.isSuccess) {
           toast.success(action.payload.data.msg);
-          setTimeout(() => {
-            window.location.reload();
-          }, 100);
         }
+        const { data } = action.payload;
+        state.data = state.data.length > 0 ? state.data : [];
+        state.data = [data, ...state.data];
       })
       .addCase(createSeriThueBao.rejected, (state, action) => {
         state.isLoading = false;
@@ -219,7 +234,9 @@ export const serithuebaoSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.data = action?.payload?.id;
+        state.data = state.data.filter(
+          (arrow) => arrow.id !== action.payload.id,
+        );
       })
       .addCase(deleteSeri.rejected, (state, action) => {
         state.isLoading = false;
