@@ -41,7 +41,8 @@ export default function Customer() {
   useEffect(() => {
     getData();
     dispatch(getAllAction());
-  }, [dispatch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleCloseForm = () => {
     setOpen(false);

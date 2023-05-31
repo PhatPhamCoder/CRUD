@@ -39,7 +39,7 @@ export default function Form(props) {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [userAuth]);
 
   // get data
   useEffect(() => {
@@ -51,7 +51,7 @@ export default function Form(props) {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [userData]);
 
   const formik = useFormik({
     enableReinitialize: true,

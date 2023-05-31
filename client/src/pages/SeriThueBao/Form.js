@@ -88,7 +88,7 @@ export default function Form(props) {
         }
       }
     }
-  }, [dataUpdate]);
+  }, [isUpdate, dataUpdate]);
 
   const handleClose = () => {
     formik.resetForm();
