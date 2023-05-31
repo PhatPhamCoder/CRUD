@@ -218,19 +218,16 @@ export const roleSlice = createSlice({
       })
       .addCase(updateByID.pending, (state) => {
         state.isLoading = true;
-        state.msgSuccess = undefined;
         state.appError = undefined;
         state.serverError = undefined;
       })
       .addCase(updateByID.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.msgSuccess = action?.payload?.msg;
         state.appError = undefined;
         state.serverError = undefined;
       })
       .addCase(updateByID.rejected, (state, action) => {
         state.isLoading = false;
-        state.msgSuccess = undefined;
         state.appError = action?.payload;
         state.serverError = action?.error?.message;
       })

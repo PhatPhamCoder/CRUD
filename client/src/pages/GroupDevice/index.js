@@ -12,6 +12,7 @@ import {
 } from "../../redux/slices/groupDevice";
 import Pagination from "../../components/Pagination";
 import Search from "./Search";
+import { toast } from "react-toastify";
 
 export default function GroupDevice() {
   const dispatch = useDispatch();
@@ -32,8 +33,13 @@ export default function GroupDevice() {
     };
     dispatch(updateByID(dataUpdate));
   };
-  const handleAddData = (data) => {
-    dispatch(createGroupDevice(data));
+  const handleAddData = async (data) => {
+    const resultAction = await dispatch(createGroupDevice(data));
+    if (createGroupDevice.fulfilled.match(resultAction)) {
+      toast.success(resultAction.payload.msg);
+    } else {
+      toast.error("Server đang bận!");
+    }
   };
   // const handleCloseForm = () => {};
 

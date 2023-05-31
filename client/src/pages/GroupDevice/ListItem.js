@@ -22,7 +22,6 @@ export default function ListItem({ data = [], openFormUpdate }) {
   const handleStatus = async (e, id) => {
     const publish = e.target.checked;
     await dispatch(updatePublish({ id, publish }));
-    window.location.reload();
   };
 
   const handleOpenFormUpdate = (id) => {
@@ -41,9 +40,6 @@ export default function ListItem({ data = [], openFormUpdate }) {
         if (deleteGroupDevice.fulfilled.match(action)) {
           const msg = action.payload.msg;
           toast.success(msg);
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
         } else {
           const msg = action.payload;
           toast.error(msg);

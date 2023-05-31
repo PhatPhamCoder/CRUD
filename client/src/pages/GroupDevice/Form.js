@@ -29,7 +29,6 @@ export default function Form(props) {
   // create data
   const handleAddData = (e) => {
     e.preventDefault();
-
     let data = {
       name: formik.values.name,
       publish: formik.values.publish,
@@ -68,8 +67,7 @@ export default function Form(props) {
   }, [isUpdate, dataUpdate]);
 
   // update data
-  const handleUpdateData = (e) => {
-    e.preventDefault();
+  const handleUpdateData = () => {
     const id = dataUpdate[0].id;
     let dataUpdateNew = {
       name: formik.values.name,
@@ -83,7 +81,7 @@ export default function Form(props) {
     if (isUpdate) {
       return (
         <button
-          onClick={(e) => handleUpdateData(e)}
+          onClick={() => handleUpdateData()}
           className="btn btn-primary mt-2"
         >
           Lưu

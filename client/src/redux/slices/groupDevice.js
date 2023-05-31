@@ -7,9 +7,19 @@ const module = "groupDevice";
 // Create Account
 export const createGroupDevice = createAsyncThunk(
   `${module}/create`,
-  async (data, rejectWithValue) => {
+  async (data, { rejectWithValue }) => {
     try {
-      return await groupDeviceApi.add(data);
+      const response = await groupDeviceApi.add(data);
+      if (response.result) {
+        const newData = response.data.newData;
+        const results = {
+          data: newData,
+          msg: response.data.msg,
+        };
+        return results;
+      } else {
+        return rejectWithValue(response.errors[0].msg);
+      }
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -42,7 +52,16 @@ export const deleteGroupDevice = createAsyncThunk(
   `${module}/delete`,
   async (id, rejectWithValue) => {
     try {
-      return await groupDeviceApi.delete(id);
+      const response = await groupDeviceApi.delete(id);
+      if (response.result) {
+        const results = {
+          id: id,
+          msg: response.data.msg,
+        };
+        return results;
+      } else {
+        return rejectWithValue(response.errors?.[0]?.msg);
+      }
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -55,7 +74,6 @@ export const getByIdGroupDevice = createAsyncThunk(
   async (id, rejectWithValue) => {
     try {
       const response = await groupDeviceApi.getById(id);
-
       return response.data;
     } catch (error) {
       return rejectWithValue(error);
@@ -81,9 +99,6 @@ export const updatePublish = createAsyncThunk(
           msg: response.data.msg,
         };
         toast.success(response.data.msg);
-        setTimeout(() => {
-          window.location.reload();
-        }, 3000);
         return result;
       } else {
         return rejectWithValue(response.errors[0].msg);
@@ -111,7 +126,6 @@ export const updateByID = createAsyncThunk(
         };
         // console.log(results);
         toast.success(response.data.msg);
-        window.location.reload();
         return results;
       } else {
         return rejectWithValue(response.errors[0].msg);
@@ -141,22 +155,18 @@ export const groupDeviceSlice = createSlice({
       .addCase(createGroupDevice.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(createGroupDevice.fulfilled, (state) => {
+      .addCase(createGroupDevice.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        if (state.isSuccess) {
-          toast.success("Thêm thành công");
-          setTimeout(() => {
-            window.location.reload();
-          }, 100);
-        }
+        const { data } = action.payload;
+        state.data = state.data.length > 0 ? state.data : [];
+        state.data = [data, ...state.data];
       })
-      .addCase(createGroupDevice.rejected, (state, action) => {
+      .addCase(createGroupDevice.rejected, (state) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
-        state.message = action.error;
       })
       .addCase(getAllGroupDevice.pending, (state) => {
         state.isLoading = true;
@@ -181,7 +191,9 @@ export const groupDeviceSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.data = action?.payload?.id;
+        state.data = state.data.filter(
+          (arrow) => arrow.id !== action.payload.id,
+        );
       })
       .addCase(deleteGroupDevice.rejected, (state, action) => {
         state.isLoading = false;
