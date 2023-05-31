@@ -9,7 +9,15 @@ export const createSoThueBao = createAsyncThunk(
   `${module}/create`,
   async (data, rejectWithValue) => {
     try {
-      return await soThueBaoApi.add(data);
+      const response = await soThueBaoApi.add(data);
+      if (response.result) {
+        const newData = response.data.newData;
+        const results = {
+          data: newData,
+          msg: response.data.msg,
+        };
+        return results;
+      }
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -51,7 +59,7 @@ export const updateStatus = createAsyncThunk(
       if (response.result) {
         const result = {
           id: id,
-          data: response.data,
+          status: status,
           msg: response.data.msg,
         };
         return result;
@@ -73,7 +81,6 @@ export const deleteSoThueBao = createAsyncThunk(
       if (response.result) {
         const result = {
           id: id,
-          data: response.data,
           msg: response.data.msg,
         };
         return result;
@@ -115,14 +122,23 @@ export const updateById = createAsyncThunk(
           newData: newData,
           msg: response.data.msg,
         };
-        toast.success(response.data.msg);
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
         return results;
       } else {
         return rejectWithValue(response.errors[0]);
       }
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  },
+);
+
+// get Static data
+export const getStatistics = createAsyncThunk(
+  `${module}/getStatistics`,
+  async ({ rejectWithValue }) => {
+    try {
+      const response = await soThueBaoApi.getStatistic();
+      return response;
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -153,12 +169,9 @@ export const soThueBaoSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        if (state.isSuccess) {
-          toast.success(action.payload.data.msg);
-          setTimeout(() => {
-            window.location.reload();
-          }, 100);
-        }
+        const { data } = action.payload;
+        state.data = state.data.length > 0 ? state.data : [];
+        state.data = [data, ...state.data];
       })
       .addCase(createSoThueBao.rejected, (state, action) => {
         state.isLoading = false;
@@ -189,7 +202,12 @@ export const soThueBaoSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.dataUpdate = action?.payload;
+        const CheckIndex = state.data.findIndex(
+          (row) => row?.id.toString() === action.payload.id.toString(),
+        );
+        if (CheckIndex >= 0) {
+          state.data[CheckIndex].status = action.payload.status;
+        }
       })
       .addCase(updateStatus.rejected, (state, action) => {
         state.isLoading = false;
@@ -204,6 +222,9 @@ export const soThueBaoSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
+        state.data = state.data.filter(
+          (arrow) => arrow.id !== action.payload.id,
+        );
       })
       .addCase(deleteSoThueBao.rejected, (state, action) => {
         state.isLoading = false;
@@ -233,12 +254,33 @@ export const soThueBaoSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
+        const checkIndex = state.data.findIndex(
+          (row) => row?.id.toString() === action?.payload?.id.toString(),
+        );
+        if (checkIndex >= 0) {
+          state.data[checkIndex]["sothuebao"] =
+            action?.payload?.newData?.sothuebao;
+          state.data[checkIndex]["status"] = action?.payload?.newData?.status;
+        }
       })
       .addCase(updateById.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
         state.message = action.error;
+      })
+      .addCase(getStatistics.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getStatistics.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+      })
+      .addCase(getStatistics.rejected, (state) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
       });
   },
 });

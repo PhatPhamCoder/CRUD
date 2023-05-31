@@ -102,7 +102,7 @@ export default function Form(props) {
         <div>
           <label className="my-2">Nhập số Thuê Bao</label>
           <input
-            type="number"
+            type="text"
             placeholder="Nhập số seri thuê bao ở đây"
             value={formik.values.sothuebao}
             onChange={formik.handleChange("sothuebao")}

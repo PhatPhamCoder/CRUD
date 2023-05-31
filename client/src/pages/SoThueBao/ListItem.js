@@ -18,9 +18,6 @@ export default function ListItem({ data = [], openFormUpdate }) {
     const msg = resultAction.payload.msg;
     if (updateStatus.fulfilled.match(resultAction)) {
       toast.success(msg);
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
     } else {
       toast.error(msg);
     }
@@ -43,9 +40,6 @@ export default function ListItem({ data = [], openFormUpdate }) {
           const msg = action.payload.msg;
           // console.log(msg);
           toast.success(msg);
-          setTimeout(() => {
-            window.location.reload();
-          }, 2000);
         } else {
           const msg = action.payload;
           toast.error(msg);

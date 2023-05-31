@@ -12,6 +12,7 @@ import {
 } from "../../redux/slices/soThueBaoSlice";
 import Pagination from "../../components/Pagination";
 import Search from "./Search";
+import { toast } from "react-toastify";
 
 export default function SoThueBao() {
   const dispatch = useDispatch();
@@ -26,8 +27,17 @@ export default function SoThueBao() {
   const thueBaoState = useSelector(selectSoThueBao);
   const { data, totalPage } = thueBaoState;
 
+  const handleCloseForm = () => {
+    setOpen(false);
+    setIsUpdate(false);
+  };
+
   const handleAddData = async (data) => {
-    await dispatch(createSoThueBao(data));
+    const action = await dispatch(createSoThueBao(data));
+    if (createSoThueBao.fulfilled.match(action)) {
+      toast.success(action.payload.msg);
+      handleCloseForm();
+    }
   };
 
   const handleOpenFormUpdate = (id) => {
@@ -41,7 +51,11 @@ export default function SoThueBao() {
       id: id,
       data: data,
     };
-    await dispatch(updateById(datas));
+    const action = await dispatch(updateById(datas));
+    if (updateById.fulfilled.match(action)) {
+      toast.success(action.payload.msg);
+      handleCloseForm();
+    }
   };
 
   const params = {
