@@ -17,7 +17,7 @@ export default function ListItem({ data = [], openFormUpdate }) {
 
   useEffect(() => {
     dispatch(getAllGroupDevice());
-  }, []);
+  }, [dispatch]);
 
   const handleStatus = async (e, id) => {
     const publish = e.target.checked;
@@ -55,12 +55,7 @@ export default function ListItem({ data = [], openFormUpdate }) {
             <td className="text-center">{index + 1}</td>
             <td>{item?.name}</td>
             <td className="text-center">
-              <div
-                className="d-flex text-center gap-2 align-items-center"
-                style={{
-                  marginLeft: "30px",
-                }}
-              >
+              <div className="d-flex text-center gap-2 align-items-center">
                 <input
                   type="checkbox"
                   // className="form-check-input d-flex text-center"

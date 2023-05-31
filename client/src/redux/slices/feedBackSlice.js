@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import feedBackApi from "../../api/feedBackApi";
-import { toast } from "react-toastify";
 
 const module = "feedBack";
 
@@ -9,7 +8,15 @@ export const createFeedBack = createAsyncThunk(
   `${module}/create`,
   async (data, rejectWithValue) => {
     try {
-      await feedBackApi.add(data);
+      const response = await feedBackApi.add(data);
+      if (response.result) {
+        const newData = response.data.newData;
+        const results = {
+          data: newData,
+          msg: response.data.msg,
+        };
+        return results;
+      }
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -75,16 +82,13 @@ export const feedBackSlice = createSlice({
       .addCase(createFeedBack.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(createFeedBack.fulfilled, (state) => {
+      .addCase(createFeedBack.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        if (state.isSuccess) {
-          toast.success("Thêm FeedBack Thành công");
-          setTimeout(() => {
-            window.location.reload();
-          }, 300);
-        }
+        const { data } = action.payload;
+        state.data = state.data.length > 0 ? state.data : [];
+        state.data = [data, ...state.data];
       })
       .addCase(createFeedBack.rejected, (state, action) => {
         state.isLoading = false;

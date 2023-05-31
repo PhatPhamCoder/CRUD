@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { object, string, date, number } from "yup";
 import { useFormik } from "formik";
 import { useSelector } from "react-redux";
@@ -14,16 +14,14 @@ let formSchema = object({
 
 export default function Form(props) {
   const { isUpdate, setOpen, addData, updateData } = props;
-  const [account, setAccount] = useState("");
-  const [password, setPassword] = useState("");
   const CustomerData = useSelector(selectCustomer);
   const { dataUpdate } = CustomerData;
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
       parent_id: "",
-      account: account,
-      password: password,
+      account: "",
+      password: "",
       role_id: "4",
       active: "",
     },

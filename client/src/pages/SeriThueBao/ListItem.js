@@ -56,7 +56,7 @@ export default function ListItem({ data = [], openFormUpdate }) {
                 onChange={(e) => handleStatus(e, item?.id)}
                 className="form-select form-control w-50 rounded"
               >
-                <option value="">-- Chọn trạng thái--</option>
+                <option value="">-- Chọn trạng thái --</option>
                 <option value="1">Đang dùng</option>
                 <option value="2">Hết hạn</option>
                 <option value="0">Chưa dùng</option>

@@ -10,6 +10,7 @@ import {
 } from "../../redux/slices/feedBackSlice";
 import Pagination from "../../components/Pagination";
 import Search from "./Search";
+import { toast } from "react-toastify";
 
 export default function Feedback() {
   const dispatch = useDispatch();
@@ -41,22 +42,21 @@ export default function Feedback() {
   const { data, totalPage } = feedBackState;
 
   // Create feedback
-  const handleAddData = (data) => {
-    dispatch(createFeedBack(data));
+  const handleAddData = async (data) => {
+    const action = await dispatch(createFeedBack(data));
+    if (createFeedBack.fulfilled.match(action)) {
+      toast.success(action.payload.msg);
+      handleCloseForm();
+    }
   };
-
-  // Update feedback
-  const handleUpdateData = () => {};
 
   const displayForm = () => {
     if (open) {
       return (
         <Form
           closeForm={handleCloseForm}
-          // isUpdate={isUpdate}
           setOpen={setOpen}
           addData={handleAddData}
-          updateData={handleUpdateData}
         />
       );
     }

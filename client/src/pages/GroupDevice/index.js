@@ -147,7 +147,7 @@ export default function GroupDevice() {
             <tr className="fw-bold fs-5">
               <th className="text-center">#</th>
               <th>Tên nhóm</th>
-              <th className="text-center">Trạng thái</th>
+              <th>Trạng thái</th>
               <th className="text-center">Ngày tạo</th>
               <th className="text-center">Chức năng</th>
             </tr>

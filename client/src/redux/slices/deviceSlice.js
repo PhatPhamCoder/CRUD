@@ -61,7 +61,14 @@ export const deleteDevice = createAsyncThunk(
   `${module}/delete`,
   async (id, rejectWithValue) => {
     try {
-      return await deviceApi.delete(id);
+      const response = await deviceApi.delete(id);
+      if (response.result) {
+        const results = {
+          id: id,
+          msg: response.data.msg,
+        };
+        return results;
+      }
     } catch (error) {
       return rejectWithValue(error);
     }

@@ -21,6 +21,7 @@ export default function SoThueBao() {
 
   const [keyword, setKeyword] = useState("");
   const [status, setStatus] = useState("");
+  console.log(status);
   const [currentPage, setCurrentPage] = useState(1);
   const [offset] = useState(0);
 
@@ -131,9 +132,23 @@ export default function SoThueBao() {
           style={{ cursor: "pointer" }}
           onClick={() => setOpen(true)}
         >
-          Thềm thuê bao <TbCirclePlus size={30} />
+          Thêm thuê bao <TbCirclePlus size={30} />
         </div>
-        <Search handleSearch={handleSearch} />
+        <div className="d-flex align-items-center gap-2">
+          <div>
+            <select
+              onChange={(e) => {
+                setStatus(e.target.value);
+              }}
+              className="form-select"
+            >
+              <option value="1">Đang dùng</option>
+              <option value="2">Hết hạn</option>
+              <option value="0">Chưa dùng</option>
+            </select>
+          </div>
+          <Search handleSearch={handleSearch} />
+        </div>
       </div>
       {open && displayForm()}
 
