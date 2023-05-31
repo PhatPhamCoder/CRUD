@@ -33,7 +33,6 @@ export default function ListItem({ data = [], openFormUpdate }) {
         if (deleteRole.fulfilled.match(action)) {
           const msg = action.payload.msg;
           toast.success(msg);
-          window.location.reload();
         } else {
           const msg = action.payload;
           toast.error(msg);
