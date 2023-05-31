@@ -60,11 +60,7 @@ export default function Home() {
     const msg = action.payload;
     if (createAdmin.fulfilled.match(action)) {
       setOpen(false);
-      setTimeout(() => {
-        toast.success(msg);
-        handleCloseForm();
-        window.location.reload();
-      }, 500);
+      toast.success(msg);
     } else {
       const msgError = action.payload[0].msg;
       toast.error(msgError);

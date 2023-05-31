@@ -9,7 +9,17 @@ export const createAdmin = createAsyncThunk(
   `${modulename}/create`,
   async (data, rejectWithValue) => {
     try {
-      return await adminApi.add(data);
+      const response = await adminApi.add(data);
+
+      if (response.result) {
+        const newData = response.data.newData;
+        const results = {
+          data: newData,
+          msg: response.data.msg,
+        };
+
+        return results;
+      }
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -100,13 +110,13 @@ export const deleteAction = createAsyncThunk(
       // call api
       const response = await adminApi.delete(id);
       if (response.result) {
-        const result = {
-          id,
+        const results = {
+          id: id,
           msg: response.data.msg,
         };
-        return result;
+        return results;
       } else {
-        return rejectWithValue(response.errors.msg);
+        return rejectWithValue(response.errors?.[0]?.msg);
       }
     } catch (error) {
       // console.log('Failed to fetch data list: ', error);
@@ -289,7 +299,9 @@ export const adminSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.createdAdmin = action.payload;
+        const { data } = action.payload;
+        state.data = state.data.length > 0 ? state.data : [];
+        state.data = [data, ...state.data];
       })
       .addCase(createAdmin.rejected, (state, action) => {
         state.isLoading = false;
@@ -353,9 +365,11 @@ export const adminSlice = createSlice({
       })
       .addCase(deleteAction.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.data = action.payload.id;
         state.appError = undefined;
         state.serverError = undefined;
+        state.data = state.data.filter(
+          (arrow) => arrow.id !== action.payload.id,
+        );
       })
       .addCase(deleteAction.rejected, (state, action) => {
         state.isLoading = false;

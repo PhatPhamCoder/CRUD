@@ -21,7 +21,6 @@ export default function ListItem({ data = [], openFormUpdate }) {
   const handleStatus = async (e, id) => {
     const active = e.target.checked;
     await dispatch(statusPublishAction({ id, active }));
-    window.location.reload();
   };
 
   const handleOpenFormUpdate = (id) => {
@@ -52,7 +51,6 @@ export default function ListItem({ data = [], openFormUpdate }) {
             icon: "success",
             title: msg,
           });
-          window.location.reload();
         } else {
           const msg = action.payload;
           const Toast = Swal.mixin({
