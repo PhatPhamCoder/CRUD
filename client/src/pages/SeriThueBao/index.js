@@ -16,6 +16,7 @@ import { BiExport } from "react-icons/bi";
 import { TbCirclePlus } from "react-icons/tb";
 import ExportExcel from "../../utils/ExportExcel";
 import { format } from "date-fns";
+import { toast } from "react-toastify";
 
 export default function SeriThueBao() {
   const dispatch = useDispatch();
@@ -24,6 +25,11 @@ export default function SeriThueBao() {
 
   const [keyword, setKeyword] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+
+  const handleCloseForm = () => {
+    setOpen(false);
+    setIsUpdate(false);
+  };
 
   const params = {
     keyword: keyword,
@@ -50,12 +56,16 @@ export default function SeriThueBao() {
   };
 
   // Update Seri
-  const handleUpdateData = (id, data) => {
+  const handleUpdateData = async (id, data) => {
     const dataUpdate = {
       id: id,
       data: data,
     };
-    dispatch(updateByID(dataUpdate));
+    const resutlAction = await dispatch(updateByID(dataUpdate));
+    if (updateByID.fulfilled.match(resutlAction)) {
+      toast.success(resutlAction.payload.msg);
+      handleCloseForm();
+    }
   };
 
   const handleOpenFormUpdate = (id) => {

@@ -32,6 +32,7 @@ export default function Home() {
 
   const handleCloseForm = () => {
     setOpen(false);
+    setIsUpdate(false);
   };
 
   const params = {
@@ -73,7 +74,11 @@ export default function Home() {
       id: id,
       data: data,
     };
-    await dispatch(updateDataAction(dataUpdate));
+    const resultAction = await dispatch(updateDataAction(dataUpdate));
+    if (updateDataAction.fulfilled.match(resultAction)) {
+      toast.success(resultAction.payload.msg);
+      handleCloseForm();
+    }
   };
 
   useEffect(() => {

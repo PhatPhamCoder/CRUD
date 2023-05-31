@@ -138,6 +138,7 @@ export const updateByID = createAsyncThunk(
     const body = dataUpdate?.data;
     try {
       const response = await serithuebaoApi.update(id, body);
+      console.log(response);
       if (response.result) {
         const newData = response.data.newData;
         const results = {
@@ -145,10 +146,6 @@ export const updateByID = createAsyncThunk(
           newData: newData,
           msg: response.data.msg,
         };
-        toast.success(response.data.msg);
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
         return results;
       } else {
         return rejectWithValue(response.errors[0].msg);
@@ -266,7 +263,6 @@ export const serithuebaoSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.dataUpdate = action?.payload;
       })
       .addCase(updateStatus.rejected, (state, action) => {
         state.isLoading = false;
@@ -281,6 +277,18 @@ export const serithuebaoSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
+        const checkIndex = state.data.findIndex(
+          (row) => row.id.toString() === action?.payload?.id.toString(),
+        );
+        if (checkIndex >= 0) {
+          state.data[checkIndex]["serithuebao"] =
+            action?.payload?.newData?.serithuebao;
+          state.data[checkIndex]["status"] = action?.payload?.newData?.status;
+          state.data[checkIndex]["updated_at"] =
+            action?.payload?.newData?.updated_at;
+          state.data[checkIndex]["created_at"] =
+            action?.payload?.newData?.created_at;
+        }
       })
       .addCase(updateByID.rejected, (state, action) => {
         state.isLoading = false;

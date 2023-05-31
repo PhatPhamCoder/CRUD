@@ -186,7 +186,6 @@ export const updateDataAction = createAsyncThunk(
     try {
       // call Api
       const response = await adminApi.update(id, data);
-
       if (response.result) {
         const newData = response.data.newData;
         const results = {
@@ -416,13 +415,25 @@ export const adminSlice = createSlice({
       })
       .addCase(updateDataAction.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.msgSuccess = action?.payload?.msg;
-        if (state.msgSuccess) {
-          toast.success(action?.payload?.msg);
-        }
         state.appError = undefined;
         state.serverError = undefined;
         state.userAuth.info = action.payload.newData;
+        const checkIndex = state.data.findIndex(
+          (row) => row.id.toString() === action?.payload?.id.toString(),
+        );
+        if (checkIndex >= 0) {
+          state.data[checkIndex]["name"] = action?.payload?.newData?.name;
+          state.data[checkIndex]["account"] = action?.payload?.newData?.account;
+          state.data[checkIndex]["phone"] = action?.payload?.newData?.phone;
+          state.data[checkIndex]["email"] = action?.payload?.newData?.email;
+          state.data[checkIndex]["web_page"] =
+            action?.payload?.newData?.web_page;
+          state.data[checkIndex]["active"] = action?.payload?.newData?.active;
+          state.data[checkIndex]["updated_at"] =
+            action?.payload?.newData?.updated_at;
+          state.data[checkIndex]["created_at"] =
+            action?.payload?.newData?.created_at;
+        }
       })
       .addCase(updateDataAction.rejected, (state, action) => {
         state.isLoading = false;

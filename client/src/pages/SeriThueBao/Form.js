@@ -101,7 +101,7 @@ export default function Form(props) {
         <div>
           <label>Nhập số Seri Thuê Bao</label>
           <input
-            type="number"
+            type="text"
             placeholder="Nhập số seri thuê bao ở đây"
             value={formik.values.serithuebao}
             onChange={formik.handleChange("serithuebao")}
