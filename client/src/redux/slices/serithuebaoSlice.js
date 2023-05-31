@@ -156,6 +156,28 @@ export const updateByID = createAsyncThunk(
   },
 );
 
+// import Excel
+export const importExcel = createAsyncThunk(
+  `${module}/uploadExcel`,
+  async (body, { rejectWithValue }) => {
+    try {
+      const response = await serithuebaoApi.importExcel(body);
+      if (response?.data?.result) {
+        const newData = response?.data?.data?.dataNew;
+        const results = {
+          msg: response?.data?.data?.msg,
+          data: newData,
+        };
+        return results;
+      } else {
+        return rejectWithValue(response?.data?.error);
+      }
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  },
+);
+
 const initialState = {
   serithuebao: [],
   isError: false,
@@ -301,6 +323,30 @@ export const serithuebaoSlice = createSlice({
         state.isError = true;
         state.isSuccess = false;
         state.message = action.error;
+      })
+      .addCase(importExcel.pending, (state) => {
+        state.isLoading = false;
+        state.appError = undefined;
+        state.serverError = undefined;
+      })
+      .addCase(importExcel.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.data = state.data?.length > 0 ? state.data : [];
+        state.data = [...action.payload?.data, ...state.data];
+        //cập nhật trực tiếp thông số thống kê
+        // const dataNew = state.dataStatistics?.[0]["new"];
+        // state.dataStatistics?.[0]["new"] =
+        //   parseInt(dataNew) + parseInt(action.payload?.data?.length);
+        // state.dataStatistics?.[0]["total"] =
+        //   parseInt(state.dataStatistics?.[0]["total"]) +
+        //   parseInt(action.payload?.data?.length);
+        state.appError = undefined;
+        state.serverError = undefined;
+      })
+      .addCase(importExcel.rejected, (state, action) => {
+        state.isLoading = false;
+        state.appError = action.payload;
+        state.serverError = action?.error?.message;
       });
   },
 });

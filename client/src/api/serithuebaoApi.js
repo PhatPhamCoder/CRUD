@@ -1,3 +1,4 @@
+import axios from "axios";
 import axiosClient from "./axiosClient";
 
 const module = "serithuebao";
@@ -36,6 +37,11 @@ const serithuebaoApi = {
   delete: (id) => {
     const url = `/${module}/delete/${id}`;
     return axiosClient.delete(url);
+  },
+
+  importExcel: (body) => {
+    const url = `http://localhost:3009/api/${module}/upload-excel`;
+    return axios({ method: "POST", url, data: body });
   },
 };
 export default serithuebaoApi;

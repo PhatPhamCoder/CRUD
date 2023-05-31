@@ -5,10 +5,12 @@ import {
   createSeriThueBao,
   getAllSeri,
   getByIdSeri,
+  importExcel,
   // importExcel,
   selectSeri,
   updateByID,
 } from "../../redux/slices/serithuebaoSlice";
+import Papa from "papaparse";
 import ListItem from "./ListItem";
 import Pagination from "../../components/Pagination";
 import Search from "./Search";
@@ -17,7 +19,6 @@ import { TbCirclePlus } from "react-icons/tb";
 import ExportExcel from "../../utils/ExportExcel";
 import { format } from "date-fns";
 import { toast } from "react-toastify";
-import Papa from "papaparse";
 
 export default function SeriThueBao() {
   const dispatch = useDispatch();
@@ -154,17 +155,17 @@ export default function SeriThueBao() {
     );
   };
 
-  const handleFileChange = (e) => {
-    let file = e.target.files[0];
-    // console.log(file);
-    // Parse local CSV file
-    Papa.parse(file, {
-      header: true,
-      withCredentials: true,
-      complete: function (results) {
-        console.log("Finished:", results.data);
-      },
-    });
+  const handleFileChange = async (e) => {
+    const formData = new FormData();
+    if (e.target.files.length === 0) {
+      return;
+    }
+    formData.append("excel", e.target.files[0]);
+
+    const action = await dispatch(importExcel(formData));
+    if (importExcel.fulfilled.match(action)) {
+      toast.success("Thêm thành công");
+    }
   };
 
   return (
@@ -187,11 +188,11 @@ export default function SeriThueBao() {
             Import Excel
           </label>
           <input
-            type="file"
             id="importFile"
+            type="file"
             hidden
             onChange={(e) => handleFileChange(e)}
-            accept="text/csv"
+            // accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
           />
         </div>
         <div
