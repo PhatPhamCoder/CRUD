@@ -11,8 +11,8 @@ export default function ListItem({ data = [], openFormUpdate }) {
   // console.log(data);
   const dispatch = useDispatch();
   const handleStatus = async (e, id) => {
-    const active = e.target.checked;
-    await dispatch(updatePublish({ id, active }));
+    const publish = e.target.checked;
+    await dispatch(updatePublish({ id, publish }));
   };
 
   // Open Form Update
@@ -52,7 +52,7 @@ export default function ListItem({ data = [], openFormUpdate }) {
               <div className="d-flex gap-2 align-items-center">
                 <input
                   type="checkbox"
-                  className="form-check-input"
+                  // className="form-check-input"
                   checked={item.publish}
                   onChange={(e) => handleStatus(e, item.id)}
                 />

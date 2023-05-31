@@ -81,24 +81,22 @@ export const getByIdRole = createAsyncThunk(
 // update status
 export const updatePublish = createAsyncThunk(
   `${moduleName}/status`,
-  async (dataUpdate, rejectWithValue) => {
+  async (dataUpdate, { rejectWithValue }) => {
     const id = dataUpdate?.id;
-    const publish = dataUpdate?.active;
+    const publish = dataUpdate?.publish;
     try {
       const data = {
         publish: publish,
       };
-      const body = JSON.stringify(data);
-      const response = await roleApi.updatePublish(id, body);
+      // const body = JSON.stringify(data);
+      const response = await roleApi.updatePublish(id, data);
       if (response.result) {
         const result = {
-          data: response.data,
+          id: id,
+          publish: publish,
           msg: response.data.msg,
         };
         toast.success(response.data.msg);
-        setTimeout(() => {
-          window.location.reload();
-        }, 3000);
         return result;
       } else {
         return rejectWithValue(response.errors[0].msg);
@@ -233,6 +231,28 @@ export const roleSlice = createSlice({
       .addCase(updateByID.rejected, (state, action) => {
         state.isLoading = false;
         state.msgSuccess = undefined;
+        state.appError = action?.payload;
+        state.serverError = action?.error?.message;
+      })
+      .addCase(updatePublish.pending, (state) => {
+        state.isLoading = true;
+        state.appError = undefined;
+        state.serverError = undefined;
+      })
+      .addCase(updatePublish.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.appError = undefined;
+        state.serverError = undefined;
+        // Kiểm tra dữ liệu theo hàng bắt đầu từ 0 truyền dữ liệu cho ID tại nó
+        const checkIndex = state.data.findIndex(
+          (row) => row.id.toString() === action?.payload?.id.toString(),
+        );
+        if (checkIndex >= 0) {
+          state.data[checkIndex].publish = action?.payload?.publish;
+        }
+      })
+      .addCase(updatePublish.rejected, (state, action) => {
+        state.isLoading = false;
         state.appError = action?.payload;
         state.serverError = action?.error?.message;
       });
