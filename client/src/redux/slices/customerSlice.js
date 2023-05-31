@@ -17,7 +17,7 @@ export const getAllAction = createAsyncThunk(
         };
         return result;
       } else {
-        return rejectWithValue(response?.error[0]);
+        return rejectWithValue(response?.error[0].msg);
       }
     } catch (error) {
       return rejectWithValue(error);
@@ -74,8 +74,8 @@ export const deleteCustomer = createAsyncThunk(
       const res = await customerApi.delete(id);
       if (res.result) {
         const results = {
-          msg: res.data.msg,
           id: id,
+          msg: res.data.msg,
         };
         return results;
       }
@@ -112,13 +112,13 @@ export const updateCustomerById = createAsyncThunk(
       const response = await customerApi.updateById(id, data);
       if (response.result) {
         const newData = response.data.newData;
+        // console.log(newData);
         const results = {
           id: id,
           newData: newData,
+          dataOld: data,
           msg: response.data.msg,
         };
-        toast.success(response?.data?.msg);
-        window.location.reload();
         return results;
       } else {
         return rejectWithValue(response.error);
@@ -189,11 +189,14 @@ export const customerSlice = createSlice({
         state.appError = undefined;
         state.ServerError = undefined;
       })
-      .addCase(deleteCustomer.fulfilled, (state) => {
+      .addCase(deleteCustomer.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.appError = undefined;
         state.ServerError = undefined;
+        state.data = state.data.filter(
+          (arrow) => arrow.id !== action.payload.id,
+        );
       })
       .addCase(deleteCustomer.rejected, (state, action) => {
         state.isLoading = false;
@@ -228,6 +231,7 @@ export const customerSlice = createSlice({
         state.msgSuccess = action?.payload?.msg;
         state.appError = undefined;
         state.serverError = undefined;
+        state.dataUpdate = action?.payload?.newData;
       })
       .addCase(updateCustomerById.rejected, (state, action) => {
         state.isLoading = false;

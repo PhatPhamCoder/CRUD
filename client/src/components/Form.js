@@ -27,6 +27,7 @@ export default function Form(props) {
   const [edit, setEdit] = useState(true);
   const [userData, setUserData] = useState();
   const [roleUser, setRoleUser] = useState();
+  const [noEdit] = useState(true);
 
   // get role by ID
   useEffect(() => {
@@ -236,7 +237,7 @@ export default function Form(props) {
               onChange={formik.handleChange("account")}
               onBlur={formik.handleBlur("account")}
               className="form-control"
-              disabled={edit}
+              disabled={noEdit}
             />
           </div>
           <div className="text-danger mt-1">

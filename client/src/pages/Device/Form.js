@@ -47,7 +47,8 @@ export default function Form(props) {
   });
 
   // create data event
-  const handleAddData = () => {
+  const handleAddData = (e) => {
+    e.preventDefault();
     let data = {
       imei: formik.values.imei,
       seri: formik.values.seri,
@@ -142,7 +143,7 @@ export default function Form(props) {
       return (
         <button
           type="submit"
-          onClick={() => handleAddData()}
+          onClick={(e) => handleAddData(e)}
           className="btn btn-primary mt-2"
         >
           Thêm

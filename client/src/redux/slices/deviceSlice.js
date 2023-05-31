@@ -161,10 +161,15 @@ export const deviceSlice = createSlice({
       .addCase(createDevice.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(createDevice.fulfilled, (state) => {
+      .addCase(createDevice.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
+        // cập nhật data vừa add và hiển thị lên listItem
+        const { data } = action?.payload;
+        state.data = state.data?.length > 0 ? state.data : [];
+        state.data = [data, ...state.data];
+        // state.msgSuccess = action?.payload?.msg;
       })
       .addCase(createDevice.rejected, (state, action) => {
         state.isLoading = false;
@@ -195,7 +200,9 @@ export const deviceSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.data = action?.payload?.id;
+        state.data = state.data.filter(
+          (arrow) => arrow.id !== action.payload.id,
+        );
       })
       .addCase(deleteDevice.rejected, (state, action) => {
         state.isLoading = false;

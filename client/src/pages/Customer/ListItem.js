@@ -43,9 +43,6 @@ export default function LisItem({ data = [], openFormUpdate }) {
         if (deleteCustomer.fulfilled.match(action)) {
           const msg = action.payload.msg;
           toast.success(msg);
-          setTimeout(() => {
-            window.location.reload();
-          }, 300);
         } else {
           const msg = action.payload;
           toast.error(msg);

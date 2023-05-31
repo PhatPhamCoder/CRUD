@@ -26,10 +26,21 @@ export default function Customer() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const [isUpdate, setIsUpdate] = useState();
+
+  const params = {
+    keyword: keyword,
+    offset,
+    limit: 10,
+  };
+
+  const getData = () => {
+    dispatch(getAllAction(params));
+  };
+
   useEffect(() => {
+    getData();
     dispatch(getAllAction());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dispatch]);
 
   const handleCloseForm = () => {
     setOpen(false);
@@ -64,19 +75,9 @@ export default function Customer() {
     }
   };
 
-  const getData = () => {
-    dispatch(getAllAction(params));
-  };
-
   // Create Customer
   const handleAddData = (data) => {
     dispatch(createCustomer(data));
-  };
-
-  const params = {
-    keyword: keyword,
-    offset,
-    limit: 10,
   };
 
   // ------Pagination--------

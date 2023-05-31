@@ -36,9 +36,6 @@ export default function ListItem({
         if (deleteDevice.fulfilled.match(action)) {
           const msg = action.payload.msg;
           toast.success(msg);
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
         } else {
           const msg = action.payload;
           toast.error(msg);

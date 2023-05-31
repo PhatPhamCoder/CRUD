@@ -60,10 +60,6 @@ export default function Device() {
     if (createDevice.fulfilled.match(action)) {
       setOpen(false);
       toast.success(msg);
-      setTimeout(() => {
-        handleCloseForm();
-        window.location.reload();
-      }, 1000);
     } else {
       const msgError = action.payload[0].msg;
       toast.error(msgError);
