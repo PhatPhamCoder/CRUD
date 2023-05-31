@@ -136,6 +136,7 @@ export default function SoThueBao() {
         <Search handleSearch={handleSearch} />
       </div>
       {open && displayForm()}
+
       <table className="table">
         <thead>
           <tr className="fw-bold">

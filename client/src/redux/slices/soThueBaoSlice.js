@@ -133,12 +133,20 @@ export const updateById = createAsyncThunk(
 );
 
 // get Static data
-export const getStatistics = createAsyncThunk(
+export const getStatisticsThueBao = createAsyncThunk(
   `${module}/getStatistics`,
-  async ({ rejectWithValue }) => {
+  async (rejectWithValue) => {
     try {
       const response = await soThueBaoApi.getStatistic();
-      return response;
+      if (response.result) {
+        const result = {
+          data: response.data,
+        };
+        // console.log(result);
+        return result;
+      } else {
+        return rejectWithValue(response.errors[0].msg);
+      }
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -172,6 +180,10 @@ export const soThueBaoSlice = createSlice({
         const { data } = action.payload;
         state.data = state.data.length > 0 ? state.data : [];
         state.data = [data, ...state.data];
+        const dataNew = state.dataStatistics[0]["new"];
+        // Dashboard
+        state.dataStatistics[0]["new"] = parseInt(dataNew) + 1;
+        state.dataStatistics[0]["total"] = state.dataStatistics[0]["total"] + 1;
       })
       .addCase(createSoThueBao.rejected, (state, action) => {
         state.isLoading = false;
@@ -206,8 +218,46 @@ export const soThueBaoSlice = createSlice({
           (row) => row?.id.toString() === action.payload.id.toString(),
         );
         if (CheckIndex >= 0) {
-          state.data[CheckIndex].status = action.payload.status;
+          if (!(state.data[CheckIndex]["status"] === action?.payload?.status)) {
+            let status = "";
+            switch (parseInt(action?.payload?.status)) {
+              case 0:
+                status = "new";
+                break;
+              case 1:
+                status = "using";
+                break;
+              case 2:
+                status = "expired";
+                break;
+
+              default:
+                break;
+            }
+            // Cập nhật lại trạng thái đã thay đổi
+            const quantityStatusChangeOld = state.dataStatistics[0][status];
+            state.dataStatistics[0][status] = quantityStatusChangeOld + 1;
+
+            let statusOld = "";
+            switch (parseInt(state.data[CheckIndex]["status"])) {
+              case 0:
+                statusOld = "new";
+                break;
+              case 1:
+                statusOld = "using";
+                break;
+              case 2:
+                statusOld = "expried";
+                break;
+
+              default:
+                break;
+            }
+            state.dataStatistics[0][statusOld] =
+              state.dataStatistics[0][statusOld] - 1;
+          }
         }
+        state.data[CheckIndex].status = action?.payload?.status;
       })
       .addCase(updateStatus.rejected, (state, action) => {
         state.isLoading = false;
@@ -269,15 +319,16 @@ export const soThueBaoSlice = createSlice({
         state.isSuccess = false;
         state.message = action.error;
       })
-      .addCase(getStatistics.pending, (state) => {
+      .addCase(getStatisticsThueBao.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getStatistics.fulfilled, (state) => {
+      .addCase(getStatisticsThueBao.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
+        state.dataStatistics = action?.payload?.data;
       })
-      .addCase(getStatistics.rejected, (state) => {
+      .addCase(getStatisticsThueBao.rejected, (state) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
