@@ -42,7 +42,14 @@ export const deleteFeedback = createAsyncThunk(
   `${module}/delete`,
   async (id, rejectWithValue) => {
     try {
-      return feedBackApi.delete(id);
+      const response = await feedBackApi.delete(id);
+      if (response.result) {
+        const results = {
+          id: id,
+          msg: response?.data?.msg,
+        };
+        return results;
+      }
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -104,10 +111,13 @@ export const feedBackSlice = createSlice({
       .addCase(deleteFeedback.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(deleteFeedback.fulfilled, (state) => {
+      .addCase(deleteFeedback.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
+        state.data = state.data.filter(
+          (arrow) => arrow.id !== action.payload.id,
+        );
       })
       .addCase(deleteFeedback.rejected, (state, action) => {
         state.isLoading = false;
