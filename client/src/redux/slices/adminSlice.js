@@ -234,14 +234,6 @@ export const changePassWordAction = createAsyncThunk(
       if (!response.result) {
         return rejectWithValue(response.error);
       }
-
-      if (response.result) {
-        toast.success(response?.data?.msg);
-        setTimeout(() => {
-          window.location.reload();
-        }, 300);
-      }
-
       const result = {
         msg: response?.data?.msg,
       };
@@ -413,10 +405,10 @@ export const adminSlice = createSlice({
         state.msgSuccess = action?.payload?.msg;
         if (state.msgSuccess) {
           toast.success(action?.payload?.msg);
-          window.location.reload();
         }
         state.appError = undefined;
         state.serverError = undefined;
+        state.userAuth.info = action.payload.newData;
       })
       .addCase(updateDataAction.rejected, (state, action) => {
         state.isLoading = false;

@@ -27,6 +27,7 @@ import { AiFillDashboard, AiFillDatabase } from "react-icons/ai";
 import { titlePage } from "../utils/Contants";
 import { BsDeviceSsdFill, BsSimFill } from "react-icons/bs";
 import { TbDeviceAnalytics } from "react-icons/tb";
+import { toast } from "react-toastify";
 const { Header, Sider, Content } = Layout;
 function DefaultLayout({ children }) {
   const [collapsed, setCollapsed] = useState(false);
@@ -88,7 +89,12 @@ function DefaultLayout({ children }) {
       id: id,
       data: data,
     };
-    await dispatch(changePassWordAction(changePass));
+    const action = await dispatch(changePassWordAction(changePass));
+    if (changePassWordAction.fulfilled.match(action)) {
+      const msg = action.payload.msg;
+      toast.success(msg);
+      handleCloseForm();
+    }
   };
 
   // Title Change
