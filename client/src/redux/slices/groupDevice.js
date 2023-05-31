@@ -91,15 +91,16 @@ export const updatePublish = createAsyncThunk(
       const data = {
         publish: publish,
       };
-      const body = JSON.stringify(data);
-      const response = await groupDeviceApi.updatePublish(id, body);
+      // const body = JSON.stringify(data);
+      const response = await groupDeviceApi.updatePublish(id, data);
       if (response.result) {
-        const result = {
-          data: response.data,
+        const results = {
+          id: id,
+          publish: publish,
           msg: response.data.msg,
         };
         toast.success(response.data.msg);
-        return result;
+        return results;
       } else {
         return rejectWithValue(response.errors[0].msg);
       }
@@ -125,7 +126,6 @@ export const updateByID = createAsyncThunk(
           msg: response.data.msg,
         };
         // console.log(results);
-        toast.success(response.data.msg);
         return results;
       } else {
         return rejectWithValue(response.errors[0].msg);
@@ -218,19 +218,48 @@ export const groupDeviceSlice = createSlice({
       })
       .addCase(updateByID.pending, (state) => {
         state.isLoading = true;
-        state.msgSuccess = undefined;
         state.appError = undefined;
         state.serverError = undefined;
       })
       .addCase(updateByID.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.msgSuccess = action?.payload?.msg;
         state.appError = undefined;
         state.serverError = undefined;
+        const checkIndex = state.data.findIndex(
+          (row) => row.id.toString() === action.payload.id.toString(),
+        );
+        if (checkIndex >= 0) {
+          state.data[checkIndex]["name"] = action?.payload?.newData?.name;
+          state.data[checkIndex]["publish"] = action?.payload?.newData?.publish;
+          state.data[checkIndex]["updated_at"] =
+            action?.payload?.newData?.updated_at;
+          state.data[checkIndex]["created_at"] =
+            action?.payload?.newData?.created_at;
+        }
       })
       .addCase(updateByID.rejected, (state, action) => {
         state.isLoading = false;
-        state.msgSuccess = undefined;
+        state.appError = action?.payload;
+        state.serverError = action?.error?.message;
+      })
+      .addCase(updatePublish.pending, (state) => {
+        state.isLoading = true;
+        state.appError = undefined;
+        state.serverError = undefined;
+      })
+      .addCase(updatePublish.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.appError = undefined;
+        state.serverError = undefined;
+        const checkIndex = state.data.findIndex(
+          (row) => row.id.toString() === action?.payload?.id.toString(),
+        );
+        if (checkIndex >= 0) {
+          state.data[checkIndex].publish = action?.payload?.publish;
+        }
+      })
+      .addCase(updatePublish.rejected, (state, action) => {
+        state.isLoading = false;
         state.appError = action?.payload;
         state.serverError = action?.error?.message;
       });

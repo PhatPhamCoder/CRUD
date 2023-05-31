@@ -12,11 +12,12 @@ import {
 import ListItem from "./ListItem";
 import Pagination from "../../components/Pagination";
 import Search from "./Search";
-import { BiExport } from "react-icons/bi";
+import { BiExport, BiImport } from "react-icons/bi";
 import { TbCirclePlus } from "react-icons/tb";
 import ExportExcel from "../../utils/ExportExcel";
 import { format } from "date-fns";
 import { toast } from "react-toastify";
+import Papa from "papaparse";
 
 export default function SeriThueBao() {
   const dispatch = useDispatch();
@@ -153,6 +154,19 @@ export default function SeriThueBao() {
     );
   };
 
+  const handleFileChange = (e) => {
+    let file = e.target.files[0];
+    // console.log(file);
+    // Parse local CSV file
+    Papa.parse(file, {
+      header: true,
+      withCredentials: true,
+      complete: function (results) {
+        console.log("Finished:", results.data);
+      },
+    });
+  };
+
   return (
     <div>
       <div className="d-flex align-items-center mt-1 justify-content-between">
@@ -164,7 +178,22 @@ export default function SeriThueBao() {
           Thềm quyền mới <TbCirclePlus size={30} />
         </div>
         <Search handleSearch={handleSearch} />
-
+        <div className="bg-dark p-2 rounded text-white">
+          <label
+            htmlFor="importFile"
+            className="d-flex align-items-center fw-bold gap-2"
+          >
+            <BiImport size={30} color="white" />
+            Import Excel
+          </label>
+          <input
+            type="file"
+            id="importFile"
+            hidden
+            onChange={(e) => handleFileChange(e)}
+            accept="text/csv"
+          />
+        </div>
         <div
           onClick={handleExportExcel}
           className="bg-danger rounded-3 d-flex align-items-center text-white fw-bold gap-2 p-2"

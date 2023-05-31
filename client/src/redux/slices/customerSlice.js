@@ -222,13 +222,11 @@ export const customerSlice = createSlice({
       })
       .addCase(updateCustomerById.pending, (state) => {
         state.isLoading = true;
-        state.msgSuccess = undefined;
         state.appError = undefined;
         state.serverError = undefined;
       })
       .addCase(updateCustomerById.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.msgSuccess = action?.payload?.msg;
         state.appError = undefined;
         state.serverError = undefined;
         // Check Index theo từng hàng mà người dùng chọn
@@ -250,6 +248,29 @@ export const customerSlice = createSlice({
         }
       })
       .addCase(updateCustomerById.rejected, (state, action) => {
+        state.isLoading = false;
+        state.msgSuccess = undefined;
+        state.appError = action?.payload;
+        state.serverError = action?.error?.message;
+      })
+      .addCase(updateStatusAction.pending, (state) => {
+        state.isLoading = true;
+        state.appError = undefined;
+        state.serverError = undefined;
+      })
+      .addCase(updateStatusAction.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.appError = undefined;
+        state.serverError = undefined;
+        // Check Index theo từng hàng mà người dùng chọn
+        const checkIndex = state.data.findIndex(
+          (row) => row.id.toString() === action?.payload?.id.toString(),
+        );
+        if (checkIndex >= 0) {
+          state.data[checkIndex].active = action.payload.active;
+        }
+      })
+      .addCase(updateStatusAction.rejected, (state, action) => {
         state.isLoading = false;
         state.msgSuccess = undefined;
         state.appError = action?.payload;

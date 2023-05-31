@@ -26,13 +26,12 @@ export default function GroupDevice() {
   const [offset] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const handleUpdateData = (id, data) => {
-    const dataUpdate = {
-      id: id,
-      data: data,
-    };
-    dispatch(updateByID(dataUpdate));
+  const handleCloseForm = () => {
+    setOpen(false);
+    setIsUpdate(false);
   };
+
+  // Add Data
   const handleAddData = async (data) => {
     const resultAction = await dispatch(createGroupDevice(data));
     if (createGroupDevice.fulfilled.match(resultAction)) {
@@ -41,8 +40,23 @@ export default function GroupDevice() {
       toast.error("Server đang bận!");
     }
   };
-  // const handleCloseForm = () => {};
 
+  // update Data
+  const handleUpdateData = async (id, data) => {
+    const dataUpdate = {
+      id: id,
+      data: data,
+    };
+    const action = await dispatch(updateByID(dataUpdate));
+    if (updateByID.fulfilled.match(action)) {
+      toast.success(action.payload.msg);
+      handleCloseForm();
+    } else {
+      toast.error(action.payload.erros?.[0]?.msg);
+    }
+  };
+
+  // Open Form update
   const handleOpenFormUpdate = (id) => {
     setOpen(true);
     setIsUpdate(true);

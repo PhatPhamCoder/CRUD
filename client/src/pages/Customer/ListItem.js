@@ -22,9 +22,6 @@ export default function LisItem({ data = [], openFormUpdate }) {
   const handleStatus = async (e, id) => {
     const active = e.target.checked;
     await dispatch(updateStatusAction({ id, active }));
-    setTimeout(() => {
-      window.location.reload();
-    }, 300);
   };
 
   const handleOpenFormUpdate = (id) => {
@@ -71,7 +68,7 @@ export default function LisItem({ data = [], openFormUpdate }) {
                 checked={item?.active}
                 onChange={(e) => handleStatus(e, item?.id)}
               />
-              {item?.active === 1 ? (
+              {item?.active ? (
                 <div className="text-primary fw-bold">Active</div>
               ) : (
                 <div className="text-danger fw-bold">No Active</div>

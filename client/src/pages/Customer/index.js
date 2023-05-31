@@ -15,6 +15,7 @@ import { CSVLink } from "react-csv";
 import Pagination from "../../components/Pagination";
 import Search from "./Search";
 import { Helmet } from "react-helmet";
+import { toast } from "react-toastify";
 export default function Customer() {
   const dispatch = useDispatch();
   const customerData = useSelector(selectCustomer);
@@ -44,6 +45,7 @@ export default function Customer() {
 
   const handleCloseForm = () => {
     setOpen(false);
+    setIsUpdate(false);
   };
 
   // Open Form Update
@@ -58,7 +60,13 @@ export default function Customer() {
       id: id,
       data: data,
     };
-    await dispatch(updateCustomerById(dataUpdate));
+    const action = await dispatch(updateCustomerById(dataUpdate));
+    if (updateCustomerById.fulfilled.match(action)) {
+      handleCloseForm();
+      toast.success(action.payload.msg);
+    } else {
+      return;
+    }
   };
 
   const displayForm = () => {

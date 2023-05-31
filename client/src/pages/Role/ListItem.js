@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 export default function ListItem({ data = [], openFormUpdate }) {
   // console.log(data);
   const dispatch = useDispatch();
+
   const handleStatus = async (e, id) => {
     const publish = e.target.checked;
     await dispatch(updatePublish({ id, publish }));

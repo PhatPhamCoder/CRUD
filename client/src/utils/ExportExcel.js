@@ -22,7 +22,7 @@ class ExportExcel {
           ws[cell].s = style;
         }
         XLSX.utils.book_append_sheet(wb, ws, nameSheet);
-        XLSX.writeFile(wb, `${nameFile}.xlsx`);
+        XLSX.writeFile(wb, `${nameFile}.csv`);
         resolve("Success");
       } catch (error) {
         reject({ error, message: "Error Export File" });

@@ -63,7 +63,7 @@ export default function ListItem({ data = [], openFormUpdate }) {
               >
                 <input
                   type="checkbox"
-                  className="form-check-input d-flex text-center"
+                  // className="form-check-input d-flex text-center"
                   checked={item?.publish}
                   onChange={(e) => handleStatus(e, item?.id)}
                 />
