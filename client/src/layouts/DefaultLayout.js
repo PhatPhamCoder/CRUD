@@ -80,7 +80,11 @@ function DefaultLayout({ children }) {
       id: id,
       data: data,
     };
-    await dispatch(updateDataAction(dataUpdate));
+    const action = await dispatch(updateDataAction(dataUpdate));
+    if (updateDataAction.fulfilled.match(action)) {
+      toast.success(action.payload.msg);
+      handleCloseForm();
+    }
   };
 
   // Change Password
