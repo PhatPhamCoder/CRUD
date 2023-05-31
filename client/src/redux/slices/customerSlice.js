@@ -231,7 +231,23 @@ export const customerSlice = createSlice({
         state.msgSuccess = action?.payload?.msg;
         state.appError = undefined;
         state.serverError = undefined;
-        state.dataUpdate = action?.payload?.newData;
+        // Check Index theo từng hàng mà người dùng chọn
+        const checkIndex = state.data.findIndex(
+          (row) => row.id.toString() === action?.payload?.id.toString(),
+        );
+        if (checkIndex >= 0) {
+          state.data[checkIndex]["name"] = action?.payload?.newData?.name;
+          state.data[checkIndex]["address"] = action?.payload?.newData?.address;
+          state.data[checkIndex]["phone"] = action?.payload?.newData?.phone;
+          state.data[checkIndex]["email"] = action?.payload?.newData?.email;
+          state.data[checkIndex]["web_page"] =
+            action?.payload?.newData?.web_page;
+          state.data[checkIndex]["active"] = action?.payload?.newData?.active;
+          state.data[checkIndex]["updated_at"] =
+            action?.payload?.newData?.updated_at;
+          state.data[checkIndex]["created_at"] =
+            action?.payload?.newData?.created_at;
+        }
       })
       .addCase(updateCustomerById.rejected, (state, action) => {
         state.isLoading = false;
