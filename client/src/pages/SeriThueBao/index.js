@@ -51,8 +51,12 @@ export default function SeriThueBao() {
   const { data, totalPage } = SeriState;
 
   // Create Seri
-  const handleAddData = (dataAdd) => {
-    dispatch(createSeriThueBao(dataAdd));
+  const handleAddData = async (dataAdd) => {
+    const resultAction = await dispatch(createSeriThueBao(dataAdd));
+    if (createSeriThueBao.fulfilled.match(resultAction)) {
+      toast.success(resultAction.payload.msg);
+      handleCloseForm();
+    }
   };
 
   // Update Seri

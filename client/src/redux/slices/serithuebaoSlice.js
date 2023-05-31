@@ -114,7 +114,7 @@ export const updateStatus = createAsyncThunk(
       if (response.result) {
         const result = {
           id: id,
-          data: response.data,
+          status: status,
           msg: response.data.msg,
         };
         return result;
@@ -263,6 +263,12 @@ export const serithuebaoSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
+        const checkIndex = state.data.findIndex(
+          (row) => row.id.toString() === action?.payload?.id.toString(),
+        );
+        if (checkIndex >= 0) {
+          state.data[checkIndex].status = action.payload.status;
+        }
       })
       .addCase(updateStatus.rejected, (state, action) => {
         state.isLoading = false;
