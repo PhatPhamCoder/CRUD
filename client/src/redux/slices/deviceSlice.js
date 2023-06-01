@@ -107,9 +107,6 @@ export const updatePublish = createAsyncThunk(
           msg: response.data.msg,
         };
         toast.success(response.data.msg);
-        setTimeout(() => {
-          window.location.reload();
-        }, 3000);
         return result;
       } else {
         return rejectWithValue(response.errors[0].msg);
@@ -247,6 +244,27 @@ export const deviceSlice = createSlice({
       .addCase(updateByID.rejected, (state, action) => {
         state.isLoading = false;
         state.msgSuccess = undefined;
+        state.appError = action?.payload;
+        state.serverError = action?.error?.message;
+      })
+      .addCase(updatePublish.pending, (state) => {
+        state.isLoading = true;
+        state.appError = undefined;
+        state.serverError = undefined;
+      })
+      .addCase(updatePublish.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.appError = undefined;
+        state.serverError = undefined;
+        const checkIndex = state.data.findIndex(
+          (row) => row?.id === action.payload.id,
+        );
+        if (checkIndex >= 0) {
+          state.data["checkIndex"]["publish"] = action.payload.publish;
+        }
+      })
+      .addCase(updatePublish.rejected, (state, action) => {
+        state.isLoading = false;
         state.appError = action?.payload;
         state.serverError = action?.error?.message;
       });
